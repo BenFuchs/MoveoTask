@@ -54,26 +54,25 @@ app.post('/api/codeblocks/submit', async (req, res) => {
   try {
     const codeBlock = await CodeBlock.findOne({ title });
     if (!codeBlock) {
+      console.log("Error! no coddeblock under the title: ", title)
       return res.status(404).json({ message: 'Code block not found' });
     }
 
     const storedSolution = codeBlock.solution;
 
-    // Debug logs
-    // console.log('Raw Stored Solution:', JSON.stringify(storedSolution));
-    // console.log('Raw User Solution:', JSON.stringify(userSolution));
-
     const normalizeSolution = (solution) => {
-      return solution.replace(/\s+/g, ' ').trim();  
+      return solution.replace(/\s+/g, ' ').trim().toLowerCase();
     };
 
     const normalizedStoredSolution = normalizeSolution(storedSolution);
     const normalizedUserSolution = normalizeSolution(userSolution);
 
     if (normalizedStoredSolution === normalizedUserSolution) {
+      console.log("success!")
       return res.status(200).json({ message: 'Solution is correct!' });
     } else {
-      return res.status(400).json({ message: 'Incorrect solution. Try again.' });
+      console.log("fail!")
+      return res.status(200).json({ message: 'Incorrect solution. Try again.' });
     }
   } catch (error) {
     console.error('Error checking solution:', error);
