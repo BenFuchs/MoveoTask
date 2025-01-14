@@ -1,31 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { io, Socket } from 'socket.io-client';
 import axios from 'axios';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
 
-// Update the prop type to accept initialCode
 interface WorkBenchCompProps {
   initialCode: string;
 }
+
 interface CodeBlock {
   title: string;
   initialTemplate: string;
 }
 
-
 const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
   const { id } = useParams();
   const [codeBlock, setCodeBlock] = useState<CodeBlock | null>(null);
-  const [Loading, setLoading] = useState<boolean>(true);
-  const [code, setCode] = useState(initialCode); // State for code editor
-  const [output, setOutput] = useState<string | null>(null); // State for terminal output
-  const [error, setError] = useState<string | null>(null); // State for terminal errors
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [code, setCode] = useState<string>(initialCode);
+  const [terminalMessage, setTerminalMessage] = useState<string | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [role, setrole] = useState<string>('')
 
   useEffect(() => {
     if (!id) {
-      setError("No ID found.");
-      setLoading(false);
+      setTerminalMessage("Error: No code block ID found.");
+      setIsLoading(false);
       return;
     }
 
@@ -35,64 +36,95 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
           `http://localhost:8080/api/codeblocks/${encodeURIComponent(id)}`
         );
         setCodeBlock(response.data);
-        setCode(response.data.initialTemplate); // Set initial code in the editor
+        setCode(response.data.initialTemplate);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setTerminalMessage(
+          err instanceof Error ? `Error: ${err.message}` : "An unknown error occurred."
+        );
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     fetchCodeBlock();
+
+    const newSocket = io('http://localhost:8080');
+    setSocket(newSocket);
+
+    newSocket.emit('joinRoom', id);
+
+    newSocket.on('receiveCode', (updatedCode: string) => {
+      if (updatedCode !== code) {
+        setCode(updatedCode); // Update the editor only if the received code is different
+      }
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
   }, [id]);
 
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode);
+    socket?.emit('editCode', { roomId: id, updatedCode: newCode }); // Emit the code update event
+  };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('codeUpdate', (updatedCode: string) => {
+        // console.log('Received code update:', updatedCode); // Debugging log
+        if (updatedCode !== code) {
+          setCode(updatedCode);  // Update code in the editor if different
+        }
+      });
+    }
+  }, [socket, code]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('newUser', (data) => {
+        console.log(`New user joined as: ${data.userRole}`);
+        setrole(data.userRole);
+        // You can update the UI to reflect the user's role (mentor/student)
+      });
+    }
+  }, [socket]);
 
   const runCode = async () => {
-    // console.log(code) //debugging
     try {
-      setError('');
+      setTerminalMessage(null);
       const response = await axios.post(
         `http://localhost:8080/api/codeblocks/submit`,
         {
-          title: codeBlock?.title, 
+          title: codeBlock?.title,
           userSolution: code,
         }
       );
-      if (response.data.message === 'Solution is correct!') {
-        setOutput('Solution is correct!');
-      } else {
-        setOutput(response.data.message); // Display custom incorrect answer message
-      }
+
+      setTerminalMessage(response.data.message);
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message || 'An unknown error occurred.');
-        setOutput(null);
-      }
+      setTerminalMessage(
+        err instanceof Error ? `Error: ${err.message}` : "An unknown error occurred."
+      );
     }
   };
 
-  if (Loading) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-  // console.log(codeBlock) 
   return (
     <div className="interactive-code-block">
-      <h1 className="text-2xl font-bold mb-4">{codeBlock?.title}</h1>
+      <h1 className="text-2xl font-bold mb-4">{codeBlock?.title || "Untitled Code Block"}</h1>
+      <div>{role}</div>
       <div className="editor-container bg-gray-800 p-4 rounded mb-4">
         <CodeMirror
           value={code}
           height="200px"
           theme="dark"
           extensions={[javascript()]}
-          onChange={(value) => setCode(value)} 
+          readOnly={role === 'Mentor'}
+          onChange={(value) => handleCodeChange(value)} 
         />
       </div>
       <button
@@ -103,10 +135,12 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
       </button>
       <div className="terminal-output bg-black text-white p-4 mt-4 rounded">
         <h2 className="text-lg font-bold">Output:</h2>
-        {error ? (
-          <pre className="text-red-500">{error}</pre>
+        {terminalMessage ? (
+          <pre className={terminalMessage.startsWith("Error") ? "text-red-500" : "text-green-500"}>
+            {terminalMessage}
+          </pre>
         ) : (
-          <pre>{output}</pre>
+          <pre>No output yet. Run the code to see results.</pre>
         )}
       </div>
     </div>
