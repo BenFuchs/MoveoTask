@@ -151,9 +151,11 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
       </div>
     ) : (
       <>
-        <h1 className={styles.title}>
+      <div className={styles.divCentering}>
+        <h1 className= {`${styles.title}`}>
           {codeBlock?.title || "Untitled Code Block"}
         </h1>
+        </div>
         <div className={styles.divCentering}>User is: {role}</div>
         <div className={styles.editorContainer}>
           <CodeMirror
