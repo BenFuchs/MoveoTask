@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styles from '../../stylesheets/General.module.css'
 
 const Lobby = () => {
   const codeBlocks = [
@@ -10,18 +11,15 @@ const Lobby = () => {
   ];
 
   return (
-    <div className="lobby-container">
-      <h1 className="text-2xl font-bold text-center my-6">Choose a Code Block</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4">
+    <div className={styles.lobbyContainer}>
+      <h1 className={styles.title}>Choose a Code Block</h1>
+      <div className={styles.cardsContainer}>
         {codeBlocks.map((block) => (
-          <div
-            key={block.id}
-            className="card bg-white shadow-lg rounded-lg p-6 hover:shadow-xl transition-shadow"
-          >
-            <h2 className="text-lg font-semibold mb-4">{block.title}</h2>
+          <div key={block.id} className={styles.card}>
+            <h2 className={styles.cardTitle}>{block.title}</h2>
             <Link
               to={`/codeblock/${block.id}`}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+              className={styles.linkButton}
             >
               Open
             </Link>

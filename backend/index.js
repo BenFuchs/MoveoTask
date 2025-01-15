@@ -32,13 +32,12 @@ io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   let currentRoomId;
+  let userRole;
 
   socket.on('joinRoom', (roomId) => {
     if (!roomUserCount[roomId]) {
       roomUserCount[roomId] = 0; 
-    }
-
-    let userRole;
+    }    
     // Check if the user is the first one to join the room
     if (roomUserCount[roomId] === 0) {
       userRole = 'Mentor';
@@ -67,6 +66,10 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     if (currentRoomId) {
       roomUserCount[currentRoomId]--;
+
+      if (userRole === 'Mentor') {
+        io.to(currentRoomId).emit('mentorLeft');
+      }
 
       if (roomUserCount[currentRoomId] <= 0) {
         roomUserCount[currentRoomId] = 0;
@@ -134,7 +137,7 @@ app.post('/api/codeblocks/submit', async (req, res) => {
 
     if (normalizedStoredSolution === normalizedUserSolution) {
       console.log("success!");
-      return res.status(200).json({ message: 'Solution is correct!' });
+      return res.status(200).json({ message: 'Solution is correct! :)' });
     } else {
       console.log("fail!");
       return res.status(200).json({ message: 'Incorrect solution. Try again.' });

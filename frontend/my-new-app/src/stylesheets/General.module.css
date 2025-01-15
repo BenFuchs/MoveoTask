@@ -1,0 +1,141 @@
+/* Prevent horizontal overflow, allow vertical scrolling */
+.editorContainer {
+  background-color: var(--background-color); 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  width: 100%;
+  max-width: 1920px;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+.CodeMirror {
+  width: 100%;
+  max-width: 100%; /* Ensure it doesn't exceed the container */
+  height: auto;
+  box-sizing: border-box;
+  overflow-x: auto; /* Allow horizontal scrolling if necessary */
+}
+
+/* Title styles */
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+  max-width: 100%; /* Prevent title from overflowing */
+  box-sizing: border-box; /* Include padding/borders in width */
+  word-wrap: break-word;
+}
+
+/* Ensure no horizontal overflow */
+.divCentering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.linkButton {
+  display: inline-block;
+  background-color: #04502d;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 33px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  margin-top: 5px;
+}
+
+.linkButton:hover {
+  background-color: #076a3c;
+}
+
+.terminalOutput {
+  padding: 1rem;
+  font-size: 0.8rem;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
+/* Media queries for responsiveness */
+
+/* Small screens (phones) */
+@media (max-width: 640px) {
+  .editorContainer {
+    padding: 0.5rem;
+    max-width: 100%;
+    overflow-x: auto; /* Allow horizontal scrolling if necessary */
+  }
+  .CodeMirror {
+    font-size: 0.8rem; /* Smaller font size for better fit */
+    width: 100%; /* Ensure full width in container */
+    overflow-x: auto; /* Allow horizontal scrolling within editor */
+  }
+
+  .terminalOutput {
+    padding: 0.5rem;
+    font-size: 0.75rem; /* Smaller font for better fit */
+    overflow-x: auto; /* Allow horizontal scrolling */
+  }
+
+  .title {
+    font-size: calc(1rem + 2vw);
+    text-align: center;
+    justify-content: center;
+    word-wrap: break-word;
+    width: 90%;
+    max-width: 100%;
+  }
+}
+
+/* Medium screens (tablets) */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .editorContainer {
+    padding: 1.5rem;
+    width: 100%;
+  }
+
+  .terminalOutput {
+    padding: 1.5rem;
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .linkButton {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.8rem;
+    text-align: center;
+    justify-content: center;
+    word-wrap: break-word;
+    max-width: 100%;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1025px) {
+  .editorContainer {
+    padding: 2rem;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .terminalOutput {
+    padding: 2rem;
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    text-align: center;
+    justify-content: center;
+  }
+}
