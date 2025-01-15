@@ -67,6 +67,8 @@
   justify-content: center; /* Center all cards */
   gap: 1.5rem; /* Space between cards */
   margin-top: 2rem;
+  padding: 1rem; /* Add padding for extra spacing */
+
 }
 .card {
   background-color: var(--card-background);
@@ -131,6 +133,15 @@
     width: 90%;
     max-width: 100%;
   }
+
+  .card {
+    width :150px;
+    height: 150px;
+  }
+
+  .cardsContainer{
+    margin-top: 3rem;
+  }
 }
 
 /* Medium screens (tablets) */
@@ -156,6 +167,12 @@
     justify-content: center;
     word-wrap: break-word;
     max-width: 100%;
+  }
+
+  .card {
+    width: 200px;
+    height: 180px;
+    padding: 0.8rem;
   }
 }
 
