@@ -1,3 +1,34 @@
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill available space */
+  max-height: 250px; /* Optional: restrict max height */
+}
+
+.messageContainer {
+  flex-grow: 1;  /* Allow messages to grow and take up available space */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  padding: 10px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chatInputContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+.chatInput {
+  width: 80%;
+  padding: 10px;
+}
+
+
 .editorContainer {
   background-color: var(--background-color); 
   display: flex;

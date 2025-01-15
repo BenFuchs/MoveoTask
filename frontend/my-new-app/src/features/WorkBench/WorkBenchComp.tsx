@@ -5,6 +5,7 @@ import axios from "axios";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import styles from '../../stylesheets/General.module.css'
+import ChatRoom from "../chatroom/Chatroom";
 
 
 interface WorkBenchCompProps {
@@ -19,7 +20,7 @@ interface CodeBlock {
 }
 
 const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) => {
-  const { id } = useParams();
+  const { id } = useParams<string>();
   const Navigate = useNavigate();
   const [codeBlock, setCodeBlock] = useState<CodeBlock | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -187,6 +188,8 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
         </div>
       </>
     )}
+
+    <ChatRoom roomId={id!} userRole={role}/>
   </div>
   );
 };

@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const CodeBlock = require('./models/CodeBlock');  
 const { Server } = require('socket.io');
 const http = require('http');
+const { timeStamp } = require('console');
 dotenv.config();
 
 app.use(express.json());
@@ -28,6 +29,10 @@ const io = new Server(server, {
 
 const roomUserCount = {}; // Stores the number of users per room
 
+const sendMessageToRoom = (roomId, messageType, messageData) => {
+  io.to(roomId).emit(messageType, messageData);
+};
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -42,8 +47,7 @@ io.on('connection', (socket) => {
     if (roomUserCount[roomId] === 0) {
       userRole = 'Mentor';
     } else {
-      userRole = `Student ${roomUserCount[roomId]}`;
-    }
+      userRole = `Student ${roomUserCount[roomId]}`;    }
 
     roomUserCount[roomId]++;
 
@@ -60,6 +64,18 @@ io.on('connection', (socket) => {
   // Listen for code edits
   socket.on('editCode', ({ roomId, updatedCode }) => {
     socket.to(roomId).emit('codeUpdate', updatedCode); // Emit to all clients in the room except the sender
+  });
+
+  // Listen for chat messages
+  socket.on('sendMessage', ({ roomId, userRole, message }) => {
+    const chatMessage = {
+      userRole,
+      message,
+      timestamp: new Date().toISOString(),
+    };
+    console.log(chatMessage);
+    socket.to(roomId).emit('receiveMessage', chatMessage);  // Broadcast to all users in the room except the sending user
+    console.log(`Message in room ${roomId} from ${userRole}: ${message}`);
   });
 
   // Handle disconnects
