@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { FaMoon, FaSun } from 'react-icons/fa'; 
 import Lobby from './features/Lobby/Lobby';
