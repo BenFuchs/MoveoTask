@@ -9,14 +9,16 @@ import styles from '../../stylesheets/General.module.css'
 
 interface WorkBenchCompProps {
   initialCode: string;
+  theme: string;
 }
 
 interface CodeBlock {
   title: string;
   initialTemplate: string;
+  theme: string;
 }
 
-const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
+const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) => {
   const { id } = useParams();
   const Navigate = useNavigate();
   const [codeBlock, setCodeBlock] = useState<CodeBlock | null>(null);
@@ -161,7 +163,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
           <CodeMirror
             value={code}
             height="200px"
-            theme="dark"
+            theme={theme === 'dark' ? 'dark' : 'light'}
             extensions={[javascript(), EditorView.lineWrapping]}
             onChange={(value) => handleCodeChange(value)}
             style={{ minWidth: "100%" }}

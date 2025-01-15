@@ -35,7 +35,7 @@ function App() {
         <Route path="/" element={<Lobby />} />
         <Route
           path="/codeblock/:id"
-          element={<WorkBenchComp initialCode="// Write your solution here" />}
+          element={<WorkBenchComp initialCode="// Write your solution here" theme={theme} />}
         />
       </Routes>
     </div>
