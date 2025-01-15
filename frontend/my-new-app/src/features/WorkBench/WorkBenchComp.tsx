@@ -5,7 +5,7 @@ import axios from "axios";
 import CodeMirror, { EditorView } from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import styles from '../../stylesheets/General.module.css'
-// import {EditorView} from "@codemirror/view"
+
 
 interface WorkBenchCompProps {
   initialCode: string;
@@ -25,7 +25,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
   const [terminalMessage, setTerminalMessage] = useState<string | null>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [role, setRole] = useState<string>("");
-  const [isSuccess, setIsSuccess] = useState<boolean>(false); // New state for success
+  const [isSuccess, setIsSuccess] = useState<boolean>(false); 
 
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
 
     newSocket.on("receiveCode", (updatedCode: string) => {
       if (updatedCode !== code) {
-        setCode(updatedCode); // Update the editor only if the received code is different
+        setCode(updatedCode); 
       }
     });
 
@@ -135,17 +135,19 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode }) => {
   }
 
   return (
-    <div className={styles.interactiveCodeBlock}>
+    <div >
     {isSuccess ? (
-      <div className={styles.successMessage}>
-        <h1>🎉 🎉 🎉</h1>
+      <div >
+        <h1  className={styles.divCentering}>🎉 🎉 🎉</h1>
         <h2>Great job! You got it right! 😊</h2>
+        <div className={styles.divCentering}>
         <Link
               to={`/`}
               className={styles.linkButton}
             >
               Back to lobby
             </Link>
+            </div>
       </div>
     ) : (
       <>

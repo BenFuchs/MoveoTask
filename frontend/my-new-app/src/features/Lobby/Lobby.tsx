@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from '../../stylesheets/General.module.css'
+import styles from '../../stylesheets/General.module.css';
 
 const Lobby = () => {
   const codeBlocks = [
@@ -17,12 +17,14 @@ const Lobby = () => {
         {codeBlocks.map((block) => (
           <div key={block.id} className={styles.card}>
             <h2 className={styles.cardTitle}>{block.title}</h2>
-            <Link
-              to={`/codeblock/${block.id}`}
-              className={styles.linkButton}
-            >
-              Open
-            </Link>
+            <div className={styles.buttonContainer}>
+              <Link
+                to={`/codeblock/${block.id}`}
+                className={styles.linkButton}
+              >
+                Open
+              </Link>
+            </div>
           </div>
         ))}
       </div>

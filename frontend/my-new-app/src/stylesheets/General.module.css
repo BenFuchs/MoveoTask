@@ -1,4 +1,3 @@
-/* Prevent horizontal overflow, allow vertical scrolling */
 .editorContainer {
   background-color: var(--background-color); 
   display: flex;
@@ -8,30 +7,30 @@
   width: 100%;
   max-width: 1920px;
   box-sizing: border-box;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden;
 }
 
 .CodeMirror {
   width: 100%;
-  max-width: 100%; /* Ensure it doesn't exceed the container */
+  max-width: 100%; 
   height: auto;
   box-sizing: border-box;
-  overflow-x: auto; /* Allow horizontal scrolling if necessary */
+  overflow-x: auto; 
 }
 
-/* Title styles */
 .title {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   text-align: center;
-  max-width: 100%; /* Prevent title from overflowing */
-  box-sizing: border-box; /* Include padding/borders in width */
+  max-width: 100%; 
+  box-sizing: border-box; 
   word-wrap: break-word;
+  color: var(--text-color);
+
 }
 
-/* Ensure no horizontal overflow */
 .divCentering {
   display: flex;
   justify-content: center;
@@ -40,8 +39,8 @@
 
 .linkButton {
   display: inline-block;
-  background-color: #04502d;
-  color: white;
+  background-color: var(--button-background);
+  color: var(--text-color);
   padding: 0.75rem 1.5rem;
   border-radius: 33px;
   text-decoration: none;
@@ -51,7 +50,7 @@
 }
 
 .linkButton:hover {
-  background-color: #076a3c;
+  background-color: var(--button-hover-background);
 }
 
 .terminalOutput {
@@ -60,6 +59,47 @@
   width: 100%;
   box-sizing: border-box;
   overflow-wrap: break-word;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping if needed */
+  justify-content: center; /* Center all cards */
+  gap: 1.5rem; /* Space between cards */
+  margin-top: 2rem;
+}
+.card {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 250px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.card:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  color: var(--text-color);
+  margin-bottom: auto; /* Pushes content below */
+  line-height: 1.4; /* Ensure spacing for multiline titles */
+}
+
+.buttonContainer {
+  margin-top: auto; /* Push button to the bottom */
+  display: flex;
+  justify-content: center; /* Center button horizontally */
+  align-items: center;
 }
 
 /* Media queries for responsiveness */

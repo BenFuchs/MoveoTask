@@ -1,43 +1,73 @@
-#root {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Default theme styles (light mode) */
+:root {
+  --background-color: #e3e3e3;
+  --text-color: #000000;
+  --button-background: #007bff; 
+  --button-hover-background: #0056b3;
+  --card-background: #e2e2e2; 
 
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Dark mode theme styles */
+.dark {
+  --background-color: #1e1e1e;
+  --text-color: #ffffff;
+  --button-background: #28a745;
+  --button-hover-background: #218838;
+  --card-background: #2a2a2a; 
+
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Theme toggle button */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--button-background);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.theme-toggle:hover {
+  background-color: var(--button-hover-background);
+} 
+
+/* Back to Lobby button */
+.back-to-lobby {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--button-background);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.card {
-  padding: 2em;
+.back-to-lobby:hover {
+  background-color: var(--button-hover-background);
 }
 
-.read-the-docs {
-  color: #888;
+.cardsContainer,
+.card,
+.linkButton,
+.title {
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
