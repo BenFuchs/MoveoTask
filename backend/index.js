@@ -116,6 +116,11 @@ app.get('/api/codeblocks', async (req, res) => {
   }
 });
 
+// Ping 
+app.get('/ping', (req, res) => {
+  res.status(200).json({ message: 'Server is alive', timestamp: new Date().toISOString() });
+});
+
 // GET endpoint to get specific codeblock (use this for actual task page)
 app.get('/api/codeblocks/:title', async (req, res) => {
   const title = req.params.title;

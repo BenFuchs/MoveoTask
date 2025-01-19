@@ -4,6 +4,7 @@ import { FaMoon, FaSun } from 'react-icons/fa';
 import Lobby from './features/Lobby/Lobby';
 import WorkBenchComp from './features/WorkBench/WorkBenchComp';
 import './App.css'; 
+import axios from 'axios';
 
 function App() {
   const [theme, setTheme] = useState('light'); 
@@ -18,6 +19,21 @@ function App() {
   };
 
   const isWorkbenchPage = location.pathname.startsWith('/codeblock'); 
+
+
+  const pingServer = () => {
+    const serverUrl = `https://moveo-codelingo-backend.onrender.com`;
+  
+    axios.get(serverUrl)
+      .then(response => {
+        console.log('Ping successful:', response.data);
+      })
+      .catch(error => {
+        console.error('Ping failed:', error.message);
+      });
+  };
+  
+  setInterval(pingServer, 10 * 60 * 1000);
 
   return (
     <div>
