@@ -22,7 +22,7 @@ function App() {
 
 
   const pingServer = () => {
-    const serverUrl = `https://moveo-codelingo-backend.onrender.com`;
+    const serverUrl = `https://moveo-codelingo-backend.onrender.com/ping`;
   
     axios.get(serverUrl)
       .then(response => {
