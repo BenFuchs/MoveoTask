@@ -6,9 +6,10 @@ import WorkBenchComp from './features/WorkBench/WorkBenchComp';
 import './App.css'; 
 import axios from 'axios';
 
-function App() {
+const App=()=> {
   const [theme, setTheme] = useState('light'); 
   const location = useLocation();
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
     document.documentElement.className = theme;
@@ -22,7 +23,7 @@ function App() {
 
 
   const pingServer = () => {
-    const serverUrl = `https://moveo-codelingo-backend.onrender.com/ping`;
+    const serverUrl = `${SERVER_URL}ping`;
   
     axios.get(serverUrl)
       .then(response => {

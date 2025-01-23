@@ -29,6 +29,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
   const [socket, setSocket] = useState<Socket | null>(null);
   const [role, setRole] = useState<string>("");
   const [isSuccess, setIsSuccess] = useState<boolean>(false); 
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 
   useEffect(() => {
@@ -41,7 +42,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
     const fetchCodeBlock = async () => {
       try {
         const response = await axios.get(
-          `https://moveo-codelingo-backend.onrender.com/api/codeblocks/${encodeURIComponent(id)}`
+          `${SERVER_URL}api/codeblocks/${encodeURIComponent(id)}`
         );
         setCodeBlock(response.data);
         setCode(response.data.initialTemplate);
@@ -58,7 +59,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
 
     fetchCodeBlock();
 
-    const newSocket = io("https://moveo-codelingo-backend.onrender.com");
+    const newSocket = io(SERVER_URL);
     setSocket(newSocket);
 
     newSocket.emit("joinRoom", id);
@@ -72,6 +73,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
     return () => {
       newSocket.disconnect();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleCodeChange = (newCode: string) => {
@@ -112,7 +114,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
       setTerminalMessage(null);
       setIsSuccess(false); 
       const response = await axios.post(
-        `https://moveo-codelingo-backend.onrender.com/api/codeblocks/submit`,
+        `${SERVER_URL}api/codeblocks/submit`,
         {
           title: codeBlock?.title,
           userSolution: code,

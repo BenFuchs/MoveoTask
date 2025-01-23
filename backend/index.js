@@ -29,9 +29,9 @@ const io = new Server(server, {
 
 const roomUserCount = {}; // Stores the number of users per room
 
-const sendMessageToRoom = (roomId, messageType, messageData) => {
-  io.to(roomId).emit(messageType, messageData);
-};
+// const sendMessageToRoom = (roomId, messageType, messageData) => { // This code is unused can remove safely 
+//   io.to(roomId).emit(messageType, messageData);
+// };
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);

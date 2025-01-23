@@ -18,9 +18,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ roomId, userRole }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [text, setText] = useState<string>('');
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
-    const newSocket = io('https://moveo-codelingo-backend.onrender.com');
+    const newSocket = io(SERVER_URL);
     setSocket(newSocket);
 
     newSocket.on('connect', () => {
