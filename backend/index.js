@@ -48,7 +48,7 @@ io.on('connection', (socket) => {
       userRole = 'Mentor';
     } else {
       userRole = `Student ${roomUserCount[roomId]}`;    }
-
+      console.log(userRole)
     roomUserCount[roomId]++;
 
     currentRoomId = roomId;

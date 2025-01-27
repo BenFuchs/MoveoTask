@@ -9,7 +9,7 @@ import axios from 'axios';
 const App=()=> {
   const [theme, setTheme] = useState('light'); 
   const location = useLocation();
-  // const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+  const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
   useEffect(() => {
     document.documentElement.className = theme;
@@ -23,7 +23,7 @@ const App=()=> {
 
 
   const pingServer = () => {
-    const serverUrl = `https://moveo-codelingo-backend.onrender.com/ping`;
+    const serverUrl = `${SERVER_URL}ping`;
   
     axios.get(serverUrl)
       .then(response => {
