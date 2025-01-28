@@ -38,7 +38,8 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
       setIsLoading(false);
       return;
     }
-
+  
+    // Fetch CodeBlock data
     const fetchCodeBlock = async () => {
       try {
         const response = await axios.get(
@@ -56,58 +57,64 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
         setIsLoading(false);
       }
     };
-
+  
     fetchCodeBlock();
-
+  
+    // Initialize Socket
     const newSocket = io(SERVER_URL);
     setSocket(newSocket);
-
+  
     newSocket.emit("joinRoom", id);
-
-    newSocket.on("receiveCode", (updatedCode: string) => {
+  
+    // Socket event listeners
+    const handleReceiveCode = (updatedCode: string) => {
       if (updatedCode !== code) {
-        setCode(updatedCode); 
+        setCode(updatedCode);
       }
-    });
-
+    };
+  
+    const handleMentorLeft = () => {
+      Navigate("/");
+      console.log("Mentor left! Logging out all students.");
+    };
+  
+    const handleNewUser = (data: { userRole: string }) => {
+      console.log(`New user joined as: ${data.userRole}`);
+      setRole(data.userRole);
+    };
+  
+    newSocket.on("receiveCode", handleReceiveCode);
+    newSocket.on("mentorLeft", handleMentorLeft);
+    newSocket.on("newUser", handleNewUser);
+  
     return () => {
       newSocket.disconnect();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+  
+  // Separate useEffect for socket code update listener (to avoid unnecessary dependencies)
+  useEffect(() => {
+    if (socket) {
+      const handleCodeUpdate = (updatedCode: string) => {
+        if (updatedCode !== code) {
+          setCode(updatedCode);
+        }
+      };
+  
+      socket.on("codeUpdate", handleCodeUpdate);
+  
+      return () => {
+        socket.off("codeUpdate", handleCodeUpdate);
+      };
+    }
+  }, [socket, code]);
+  
 
   const handleCodeChange = (newCode: string) => {
     setCode(newCode);
     socket?.emit("editCode", { roomId: id, updatedCode: newCode });
   };
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("mentorLeft", () => {
-        Navigate("/");
-        console.log("Mentor left! Logging out all students.");
-      });
-    }
-  }, [socket, Navigate]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("codeUpdate", (updatedCode: string) => {
-        if (updatedCode !== code) {
-          setCode(updatedCode);
-        }
-      });
-    }
-  }, [socket, code]);
-
-  useEffect(() => {
-    if (socket) {
-      socket.on("newUser", (data) => {
-        console.log(`New user joined as: ${data.userRole}`);
-        setRole(data.userRole);
-      });
-    }
-  }, [socket]);
 
   const runCode = async () => {
     try {
@@ -140,6 +147,7 @@ const WorkBenchComp: React.FC<WorkBenchCompProps> = ({ initialCode,  theme }) =>
   }
 
   return (
+    
     <div >
     {isSuccess ? (
       <div >
