@@ -13,22 +13,12 @@ const Lobby = () => {
   const [titles, settitles] = useState<Titles[]>([]);
   const [codeBlocks, setCodeBlocks] = useState<{ id: string; title: string }[]>([]);
 
-  // Function to process titles into codeBlocks
-  const processTitles = (titles: Titles[]) => {
-    return titles.map((item) => ({
-      id: encodeURIComponent(item.title), // Replaces spaces and special characters with URL-safe strings
-      title: item.title,
-    }));
-  };
-
   useEffect(() => {
     const fetchCodeBlocks = async () => {
       try {
         const response = await axios.get(`${SERVER_URL}api/codeblocks`);
         const fetchedTitles = response.data;
-        settitles(fetchedTitles);
-
-        // Process the fetched titles into codeBlocks
+        settitles(fetchedTitles);        // Process the fetched titles into codeBlocks
         const processedBlocks = processTitles(fetchedTitles);
         setCodeBlocks(processedBlocks);
       } catch (error) {
@@ -37,6 +27,16 @@ const Lobby = () => {
     };
     fetchCodeBlocks();
   }, [SERVER_URL]);
+
+  console.log(titles);
+
+    // Function to process titles into codeBlocks
+    const processTitles = (titles: Titles[]) => {
+      return titles.map((item) => ({
+        id: encodeURIComponent(item.title), // Replaces spaces and special characters with URL-safe strings
+        title: item.title,
+      }));
+    };
 
   return (
     <div className={styles.lobbyContainer}>
